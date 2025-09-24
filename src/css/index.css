@@ -1,0 +1,16 @@
+@import "./tailwind.css";
+
+@layer base {
+  html {
+    font-family: "Pretendard Variable", system-ui, sans-serif;
+  }
+}
+
+@font-face {
+  font-family: "Pretendard Variable";
+  src: url("/fonts/pretendard/PretendardVariable.woff2")
+    format("woff2-variations");
+  font-weight: 45 920; /* Pretendard Variable 지원 범위 */
+  font-style: normal;
+  font-display: swap;
+}
