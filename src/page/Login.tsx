@@ -2,7 +2,6 @@ import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import "../css/index.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 console.log("✅ 현재 API_URL:", API_URL); // <-- 디버깅용
@@ -56,10 +55,7 @@ export default function LoginPage() {
 
           {/* 이메일 */}
           <label className="block mb-4">
-            <span
-              className="block text-sm font-medium mb-1"
-              style={{ color: "rgba(55, 56, 60, 0.61)" }}
-            >
+            <span className="block text-sm font-medium mb-1 text-gray-600">
               이메일
             </span>
             <input
@@ -74,10 +70,7 @@ export default function LoginPage() {
 
           {/* 비밀번호 */}
           <label className="block mb-4">
-            <span
-              className="block text-sm font-medium mb-1"
-              style={{ color: "rgba(55, 56, 60, 0.61)" }}
-            >
+            <span className="block text-sm font-medium mb-1 text-gray-600">
               비밀번호
             </span>
             <div className="relative">
@@ -106,7 +99,12 @@ export default function LoginPage() {
           {/* 옵션 */}
           <div className="flex items-center justify-between mb-6 text-sm text-gray-600">
             <label className="flex items-center gap-2">
-              <input type="checkbox" /> 로그인 유지
+              {/* 체크박스 색상 포인트 컬러 적용 */}
+              <input
+                type="checkbox"
+                className="accent-[#6F00B6] hover:accent-[#8A2BE2]"
+              />
+              로그인 유지
             </label>
             <a href="#" className="hover:underline">
               비밀번호 재설정
@@ -135,6 +133,7 @@ export default function LoginPage() {
 
           <button
             className="w-full py-3 rounded-lg font-semibold text-[#6F00B6] hover:bg-gray-50 transition-colors"
+            onClick={() => navigate("/signup")}
             style={{ border: "1px solid rgba(112, 115, 124, 0.22)" }}
           >
             이메일로 계속하기
