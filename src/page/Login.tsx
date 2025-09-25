@@ -1,5 +1,8 @@
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import "../css/index.css";
 
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 console.log("✅ 현재 API_URL:", API_URL); // <-- 디버깅용
@@ -8,6 +11,7 @@ export default function LoginPage() {
   const { email, password, setEmail, setPassword, login } = useAuthStore();
   const navigate = useNavigate();
   const isValid = email.trim() !== "" && password.trim() !== "";
+  const [showPassword, setShowPassword] = useState(false); // 👁 상태
 
   const handleLogin = async () => {
     try {
@@ -63,7 +67,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="이메일을 입력해주세요."
-              className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
               style={{ border: "1px solid rgba(112, 115, 124, 0.22)" }}
             />
           </label>
@@ -78,19 +82,23 @@ export default function LoginPage() {
             </span>
             <div className="relative">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"} // 👁 상태 반영
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="비밀번호를 입력해주세요."
-                className="w-full rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
                 style={{ border: "1px solid rgba(112, 115, 124, 0.22)" }}
               />
-              {/* 눈 아이콘 */}
               <button
                 type="button"
+                onClick={() => setShowPassword((prev) => !prev)} // 토글
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
               >
-                👁
+                {showPassword ? (
+                  <AiOutlineEyeInvisible size={20} />
+                ) : (
+                  <AiOutlineEye size={20} />
+                )}
               </button>
             </div>
           </label>
