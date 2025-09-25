@@ -1,4 +1,8 @@
+/* src/index.css */
 @import "./tailwind.css";
+
+/* Pretendard CDN 불러오기 */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
 
 @layer base {
   html {
@@ -6,11 +10,13 @@
   }
 }
 
-@font-face {
-  font-family: "Pretendard Variable";
-  src: url("/fonts/pretendard/PretendardVariable.woff2")
-    format("woff2-variations");
-  font-weight: 45 920; /* Pretendard Variable 지원 범위 */
-  font-style: normal;
-  font-display: swap;
+/* 크롬, 사파리, 엣지에서 비밀번호 input의 기본 눈 아이콘 제거 */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  display: none !important;
 }
