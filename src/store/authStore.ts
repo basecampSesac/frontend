@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+
 interface User {
   id: number;
   email: string;
@@ -51,7 +53,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
   refreshAccessToken: async () => {
     try {
-      const res = await fetch("http://localhost:8080/api/auth/refresh", {
+      const res = await fetch(`${API_URL}/api/auth/refresh`, {
         method: "POST",
         credentials: "include", // Refresh Token이 쿠키에 있다고 가정
       });

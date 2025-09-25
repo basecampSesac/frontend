@@ -3,6 +3,8 @@ import Nav from "./components/Nav";
 import TicketList from "./page/TicketList";
 import GroupList from "./page/GroupList";
 import LoginPage from "./page/Login";
+import SignupPage from "./page/SignUp";
+
 const router = createBrowserRouter([
   {
     Component: Nav,
@@ -15,6 +17,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         Component: LoginPage,
+      },
+      {
+        path: "/signup",
+        Component: SignupPage,
       },
     ],
   },
