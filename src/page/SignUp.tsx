@@ -1,3 +1,4 @@
+// src/page/SignupPage.tsx
 import { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
@@ -25,7 +26,7 @@ export default function SignupPage() {
   const [emailMessage, setEmailMessage] = useState("");
   const [emailAvailable, setEmailAvailable] = useState(false);
 
-  // 이메일 입력 시 중복 확인
+  // 📌 이메일 중복 확인
   const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEmail(value);
@@ -60,7 +61,7 @@ export default function SignupPage() {
     }
   };
 
-  // 인증번호 발송
+  // 📌 인증번호 발송
   const handleSendCode = async () => {
     try {
       const res = await fetch(`${API_URL}/api/auth/send-code`, {
@@ -81,7 +82,7 @@ export default function SignupPage() {
     }
   };
 
-  // 인증번호 검증
+  // 📌 인증번호 검증
   const handleVerifyCode = async () => {
     try {
       const res = await fetch(`${API_URL}/api/auth/verify-code`, {
@@ -102,7 +103,7 @@ export default function SignupPage() {
     }
   };
 
-  // 닉네임 즉시 검증
+  // 📌 닉네임 중복 확인
   const handleNicknameChange = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -136,7 +137,7 @@ export default function SignupPage() {
     }
   };
 
-  // 최종 회원가입
+  // 📌 최종 회원가입
   const handleSignup = async () => {
     try {
       const res = await fetch(`${API_URL}/api/auth/signup`, {
@@ -157,7 +158,7 @@ export default function SignupPage() {
     }
   };
 
-  // 비밀번호 유효성 검사
+  // 📌 비밀번호 유효성 검사
   const isPasswordValid =
     password.length >= 8 &&
     /[A-Z]/.test(password) &&
@@ -176,210 +177,200 @@ export default function SignupPage() {
     nicknameAvailable;
 
   return (
-    <div className="[--sb:18rem] [--hd:96px] [--sp:80px]">
-      {/* 사이드바 */}
-      <aside className="fixed inset-y-0 left-0 w-72 border-r bg-white/95 backdrop-blur z-40">
-        <div className="h-25 border-b px-5 flex items-center font-semibold">
-          LOGO
+    <main className="flex flex-1 items-center justify-center bg-white py-30">
+      <div className="w-full max-w-sm p-6 rounded-lg bg-white">
+        <h1 className="text-2xl font-bold mb-8 text-center">회원가입</h1>
+
+        {/* 이메일 */}
+        <label className="block mb-4">
+          <span className="block text-sm font-medium mb-1 text-gray-600">
+            이메일*
+          </span>
+          <input
+            type="email"
+            value={email}
+            onChange={handleEmailChange}
+            placeholder="이메일을 입력해주세요."
+            className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
+            style={{ border: "1px solid rgba(112,115,124,0.22)" }}
+          />
+          {emailMessage && (
+            <p
+              className={`text-sm mt-1 ${
+                emailAvailable ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              {emailMessage}
+            </p>
+          )}
+        </label>
+
+        {/* 인증번호 */}
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            placeholder="인증번호를 입력해주세요."
+            className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
+            style={{ border: "1px solid rgba(112,115,124,0.22)" }}
+            disabled={isEmailVerified}
+          />
+          <button
+            type="button"
+            onClick={
+              isEmailVerified
+                ? undefined
+                : verificationCode
+                ? handleVerifyCode
+                : handleSendCode
+            }
+            disabled={!emailAvailable || isEmailVerified}
+            className="px-3 rounded-lg border text-sm font-medium text-[#6F00B6] hover:bg-gray-50 whitespace-nowrap"
+          >
+            {isEmailVerified
+              ? "인증 완료"
+              : verificationCode
+              ? "인증 확인"
+              : "인증번호 받기"}
+          </button>
         </div>
-      </aside>
 
-      {/* 메인 */}
-      <main className="ml-[var(--sb)] flex items-center justify-center min-h-screen">
-        <div className="w-full max-w-sm">
-          <h1 className="text-2xl font-bold mb-8 text-center">회원가입</h1>
+        {/* 닉네임 */}
+        <label className="block mb-4">
+          <span className="block text-sm font-medium mb-1 text-gray-600">
+            닉네임*
+          </span>
+          <input
+            type="text"
+            value={nickname}
+            onChange={handleNicknameChange}
+            placeholder="닉네임을 입력해주세요."
+            className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
+            style={{ border: "1px solid rgba(112,115,124,0.22)" }}
+          />
+          {nicknameMessage && (
+            <p
+              className={`text-sm mt-1 ${
+                nicknameAvailable ? "text-green-600" : "text-red-500"
+              }`}
+            >
+              {nicknameMessage}
+            </p>
+          )}
+        </label>
 
-          {/* 이메일 */}
-          <label className="block mb-4">
-            <span className="block text-sm font-medium mb-1 text-gray-600">
-              이메일*
-            </span>
+        {/* 구단 선택 */}
+        <label className="block mb-4">
+          <span className="block text-sm font-medium mb-1 text-gray-600">
+            좋아하는 구단 (선택)
+          </span>
+          <select
+            value={club}
+            onChange={(e) => setClub(e.target.value)}
+            className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
+            style={{ border: "1px solid rgba(112,115,124,0.22)" }}
+          >
+            <option value="">선택 안 함</option>
+            <option value="두산">두산</option>
+            <option value="롯데">롯데</option>
+            <option value="삼성">삼성</option>
+            <option value="SSG">SSG</option>
+            <option value="키움">키움</option>
+            <option value="KT">KT</option>
+            <option value="NC">NC</option>
+            <option value="LG">LG</option>
+            <option value="기아">기아</option>
+            <option value="한화">한화</option>
+          </select>
+        </label>
+
+        {/* 비밀번호 */}
+        <label className="block mb-4">
+          <span className="block text-sm font-medium mb-1 text-gray-600">
+            비밀번호*
+          </span>
+          <div className="relative">
             <input
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-              placeholder="이메일을 입력해주세요."
-              className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호를 입력해주세요."
+              className="w-full rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
               style={{ border: "1px solid rgba(112,115,124,0.22)" }}
-            />
-            {emailMessage && (
-              <p
-                className={`text-sm mt-1 ${
-                  emailAvailable ? "text-green-600" : "text-red-500"
-                }`}
-              >
-                {emailMessage}
-              </p>
-            )}
-          </label>
-
-          {/* 인증번호 */}
-          <div className="flex gap-2 mb-4">
-            <input
-              type="text"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-              placeholder="인증번호를 입력해주세요."
-              className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
-              style={{ border: "1px solid rgba(112,115,124,0.22)" }}
-              disabled={isEmailVerified}
             />
             <button
               type="button"
-              onClick={
-                isEmailVerified
-                  ? undefined
-                  : verificationCode
-                  ? handleVerifyCode
-                  : handleSendCode
-              }
-              disabled={!emailAvailable || isEmailVerified}
-              className="px-3 rounded-lg border text-sm font-medium text-[#6F00B6] hover:bg-gray-50 whitespace-nowrap"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
             >
-              {isEmailVerified
-                ? "인증 완료"
-                : verificationCode
-                ? "인증 확인"
-                : "인증번호 받기"}
+              {showPassword ? (
+                <AiOutlineEyeInvisible size={20} />
+              ) : (
+                <AiOutlineEye size={20} />
+              )}
             </button>
           </div>
+          <p className="text-xs text-gray-500 mt-1">
+            영문 대소문자, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.
+          </p>
+        </label>
 
-          {/* 닉네임 */}
-          <label className="block mb-4">
-            <span className="block text-sm font-medium mb-1 text-gray-600">
-              닉네임*
-            </span>
+        {/* 비밀번호 확인 */}
+        <label className="block mb-6">
+          <span className="block text-sm font-medium mb-1 text-gray-600">
+            비밀번호 확인*
+          </span>
+          <div className="relative">
             <input
-              type="text"
-              value={nickname}
-              onChange={handleNicknameChange}
-              placeholder="닉네임을 입력해주세요."
-              className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
+              type={showConfirmPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="비밀번호를 다시 입력해주세요."
+              className="w-full rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
               style={{ border: "1px solid rgba(112,115,124,0.22)" }}
             />
-            {nicknameMessage && (
-              <p
-                className={`text-sm mt-1 ${
-                  nicknameAvailable ? "text-green-600" : "text-red-500"
-                }`}
-              >
-                {nicknameMessage}
-              </p>
-            )}
-          </label>
-
-          {/* 구단 선택 */}
-          <label className="block mb-4">
-            <span className="block text-sm font-medium mb-1 text-gray-600">
-              좋아하는 구단 (선택)
-            </span>
-            <select
-              value={club}
-              onChange={(e) => setClub(e.target.value)}
-              className="w-full rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
-              style={{ border: "1px solid rgba(112,115,124,0.22)" }}
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
             >
-              <option value="">선택 안 함</option>
-              <option value="두산">두산</option>
-              <option value="롯데">롯데</option>
-              <option value="삼성">삼성</option>
-              <option value="SSG">SSG</option>
-              <option value="키움">키움</option>
-              <option value="KT">KT</option>
-              <option value="NC">NC</option>
-              <option value="LG">LG</option>
-              <option value="기아">기아</option>
-              <option value="한화">한화</option>
-            </select>
-          </label>
-
-          {/* 비밀번호 */}
-          <label className="block mb-4">
-            <span className="block text-sm font-medium mb-1 text-gray-600">
-              비밀번호*
-            </span>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="비밀번호를 입력해주세요."
-                className="w-full rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
-                style={{ border: "1px solid rgba(112,115,124,0.22)" }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-              >
-                {showPassword ? (
-                  <AiOutlineEyeInvisible size={20} />
-                ) : (
-                  <AiOutlineEye size={20} />
-                )}
-              </button>
-            </div>
-            <p className="text-xs text-gray-500 mt-1">
-              영문 대소문자, 숫자, 특수문자를 포함해 8~16자로 입력해주세요.
+              {showConfirmPassword ? (
+                <AiOutlineEyeInvisible size={20} />
+              ) : (
+                <AiOutlineEye size={20} />
+              )}
+            </button>
+          </div>
+          {password !== confirmPassword && confirmPassword !== "" && (
+            <p className="text-sm text-red-500 mt-1">
+              비밀번호가 일치하지 않습니다.
             </p>
-          </label>
+          )}
+        </label>
 
-          {/* 비밀번호 확인 */}
-          <label className="block mb-6">
-            <span className="block text-sm font-medium mb-1 text-gray-600">
-              비밀번호 확인*
-            </span>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="비밀번호를 다시 입력해주세요."
-                className="w-full rounded-lg p-3 pr-10 focus:outline-none focus:ring-2 focus:ring-[#6F00B6]"
-                style={{ border: "1px solid rgba(112,115,124,0.22)" }}
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
-              >
-                {showConfirmPassword ? (
-                  <AiOutlineEyeInvisible size={20} />
-                ) : (
-                  <AiOutlineEye size={20} />
-                )}
-              </button>
-            </div>
-            {password !== confirmPassword && confirmPassword !== "" && (
-              <p className="text-sm text-red-500 mt-1">
-                비밀번호가 일치하지 않습니다.
-              </p>
-            )}
-          </label>
+        {/* 뒤로가기 */}
+        <button
+          onClick={() => navigate("/login")}
+          className="w-full py-3 rounded-lg font-semibold text-gray-600 hover:bg-gray-100 transition-colors mb-4"
+          style={{ border: "1px solid rgba(112,115,124,0.22)" }}
+        >
+          ← 로그인 화면으로 돌아가기
+        </button>
 
-          {/* 뒤로가기 */}
-          <button
-            onClick={() => navigate("/login")}
-            className="w-full py-3 rounded-lg font-semibold text-gray-600 hover:bg-gray-100 transition-colors mb-4"
-            style={{ border: "1px solid rgba(112,115,124,0.22)" }}
-          >
-            ← 로그인 화면으로 돌아가기
-          </button>
-
-          {/* 회원가입 */}
-          <button
-            onClick={handleSignup}
-            disabled={!isValid}
-            className={`w-full py-3 rounded-lg font-semibold transition-colors ${
-              isValid
-                ? "bg-[#6F00B6] text-white hover:bg-[#8A2BE2]"
-                : "bg-gray-200 text-gray-400 cursor-not-allowed"
-            }`}
-          >
-            가입하기
-          </button>
-        </div>
-      </main>
-    </div>
+        {/* 회원가입 */}
+        <button
+          onClick={handleSignup}
+          disabled={!isValid}
+          className={`w-full py-3 rounded-lg font-semibold transition-colors ${
+            isValid
+              ? "bg-[#6F00B6] text-white hover:bg-[#8A2BE2]"
+              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+          }`}
+        >
+          가입하기
+        </button>
+      </div>
+    </main>
   );
 }
