@@ -68,3 +68,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 }));
+
+// 전역 노출 코드
+// if (typeof window !== "undefined") {
+//   (window as any).useAuthStore = useAuthStore;
+// }
