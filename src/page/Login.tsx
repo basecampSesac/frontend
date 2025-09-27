@@ -37,7 +37,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex flex-1 items-center justify-center bg-white py-">
+    <main className="flex flex-1 items-center justify-center bg-white py-30">
       <div className="w-full max-w-sm p-6 rounded-lg bg-white">
         {/* 타이틀 */}
         <h1 className="text-2xl font-bold mb-8 text-center">이메일로 로그인</h1>
